@@ -48,8 +48,8 @@
 
 <script lang="ts">
 import { defineComponent,ref,computed,watch,onMounted } from 'vue'
-import { pickerColorHsvRgba } from "@/types/shape"
-import { rgbtohsv,hsvtorgb,colorToRgba,rgbaTocolor } from '@/until/index'
+import { pickerColorHsvRgba } from "../../types/shape"
+import { rgbtohsv,hsvtorgb,colorToRgba,rgbaTocolor } from '../../until/index'
 import pickerSvpanel from './pickerSvpanel.vue'
 import colorBar from './colorBar.vue'
 import colorSlider from './colorSlider.vue'

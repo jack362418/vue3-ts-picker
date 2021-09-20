@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent,ref,PropType,computed,watch,onMounted } from 'vue'
-import { pickerColorHsvRgba } from "@/types/shape"
+import { pickerColorHsvRgba } from "../../types/shape"
 export default defineComponent({
     name: 'colorBar',
     props: {

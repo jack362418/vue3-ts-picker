@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { defineComponent,ref,PropType,computed,onMounted,watch} from 'vue'
-import { pickerColorHsvRgba } from "@/types/shape"
-import { rgbtohsv,hsvtorgb } from '@/until/index'
+import { pickerColorHsvRgba } from "../../types/shape"
+import { rgbtohsv,hsvtorgb } from '../../until/index'
 export default defineComponent({
     name: 'colorSlider',
     props: {

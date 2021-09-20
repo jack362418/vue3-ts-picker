@@ -4,17 +4,28 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const port = process.env.port || process.env.npm_config_port || 9529 // dev port
 
 module.exports = {
+  // pages:{
+  //   index:{
+  //     entry: 'src/components/colorPicker/index.ts'
+  //   }
+  // },
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
+  filenameHashing: false,
   lintOnSave: false,
   productionSourceMap: false,
   devServer: {
-    port: port,
     open: false
+  },
+  css:{
+    extract: true,
+
+    // 是否开启 CSS source map？
+
+    sourceMap: false,
   },
   configureWebpack: {
     name: "picker",
