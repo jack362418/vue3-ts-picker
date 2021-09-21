@@ -1,6 +1,6 @@
 {
   "name": "vue3-ts-picker",
-  "version": "1.1.9",
+  "version": "2.0.0",
   "description": "基于vue3取色器",
   "private": false,
   "license": "MIT",  
@@ -10,6 +10,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib ./src/components/colorPicker/index.vue",
     "lint": "vue-cli-service lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jack362418/vue3-ts-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/jack362418/vue3-ts-picker"
   },
   "dependencies": { 
     "vue": "^3.0.0",
