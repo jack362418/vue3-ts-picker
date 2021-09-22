@@ -1,17 +1,42 @@
 <template>
   <div class="color-picker">
-    <div class="svpanel"> 
-        <pickerSvpanel :pickerColorHsv='pickerColorHsv' :pickerColorSvpanelBg='pickerColorSvpanelBg' :hsv="hsv"  @colorChange="value => changePickerColor(value)"/>
+    <div class="svpanel">  
+        <div class="pickerSvpanel">
+            <div class="picker-color-svpanel" :style="{'background': pickerColorSvpanelBg}" ref="pickerColorSvpanel" @mousedown.stop="$event => handleChangePickerSvpanel($event)">
+                <div class="picker-color-svpanel__white picker-com"></div>
+                <div class="picker-color-svpanel__black picker-com"></div>
+                <div class="picker-color-svpanel__cursor" :style="{
+                    top: pickerColorSvpCursor.top + '%',
+                    left: pickerColorSvpCursor.left + '%'
+                }">
+                    <div class="pointer"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="picker-color-bar">
         <div class="color-content">
             <div class="picker-current-color" :style="{'background': adsorbentColor}"></div>
         </div>
         <div class="color-slider">
-            <div class="picker-color-barWraper">
-                <colorBar :pickerColorHsv='pickerColorHsv' :hsv="hsv" @colorChange="value => changePickerColor(value)"/>
+            <div class="picker-color-barWraper"> 
+                <div class="colorBar">
+                    <div class="content" ></div>
+                    <div class="picker-color-content-bar" ref="pickerSliderBarEle"  @mousedown="$event => handleChangePickerBar($event)">
+                        <div class="bar" :style="{
+                            left: pickerColorBar + '%'
+                        }"></div>
+                    </div>
+                </div>
+            </div> 
+            <div class="colorSlider">
+                <div class="picker-color-alpha-slider" ref="pickerSliderSliderEle" @mousedown="$event => handleChangePickerSlider($event)">
+                    <div class="picker-color-alpha-slider__bar" :style="{background: pickerSliderBar}"></div>
+                    <div class="picker-color-alpha-slider__thumb" :style="{
+                        left: pickerSliderSlider + '%'
+                    }"></div>
+                </div>
             </div>
-            <colorSlider :pickerColorHsv='pickerColorHsv' :hsv="hsv" @colorChange="value => changePickerColor(value)"/>
         </div>
     </div>
     <div class="picker-color-dropdown__btns">
@@ -47,19 +72,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref,computed,watch,onMounted } from 'vue'
+import { defineComponent,ref,computed,watch,onMounted,toRef } from 'vue'
 import { pickerColorHsvRgba } from "../../types/shape"
-import { rgbtohsv,hsvtorgb,colorToRgba,rgbaTocolor } from '../../until/index'
-import pickerSvpanel from './pickerSvpanel.vue'
-import colorBar from './colorBar.vue'
-import colorSlider from './colorSlider.vue'
+import { rgbtohsv,hsvtorgb,colorToRgba,rgbaTocolor } from '../../until/index'  
+import usePickerSvpanel from './hooks/usePickerSvpanel'
+import useColorBar from './hooks/useColorBar'
+import useColorSlider from './hooks/useColorSlider'
 export default defineComponent({
-  name: 'color-picker',
-  components:{
-      pickerSvpanel,
-      colorBar,
-      colorSlider
-  },
+  name: 'color-picker', 
   props:{
       color: {
           type: String,
@@ -148,6 +168,12 @@ export default defineComponent({
           pickerColorHsv.value.v = value.v
           pickerColorHsv.value.a = value.a
       }
+
+     const hsvC = computed(() => hsv.value)
+     const pickerSvpanel = usePickerSvpanel(pickerColorHsv.value,hsvC)
+     const colorBar = useColorBar(pickerColorHsv.value,hsvC)
+     const colorSlider = useColorSlider(pickerColorHsv.value,hsvC)
+
       return {
           pickerColorSvpanelBg,
           adsorbentColor,
@@ -159,7 +185,10 @@ export default defineComponent({
           hsv,
           colorMode,
           isRgbMode,
-          changeColorMode
+          changeColorMode,
+          ...pickerSvpanel,
+          ...colorBar,
+          ...colorSlider
       }
   }
 })
@@ -236,6 +265,99 @@ export default defineComponent({
             }
             &>div:nth-child(8n){
                  margin-right: 0; 
+            }
+        }
+    }
+
+      .pickerSvpanel{
+        .picker-color-svpanel{
+            position: relative;
+            height: 180px;
+            cursor: pointer;
+            .picker-color-svpanel__white{
+                background: linear-gradient(90deg,#fff,hsla(0,0%,100%,0));
+            }
+            .picker-color-svpanel__black{
+                background: linear-gradient(0deg,#000,transparent);
+            }
+            .picker-color-svpanel__cursor{
+                position: absolute;
+                .pointer{
+                    width: 4px;
+                    height: 4px;
+                    box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,0.3), 0 0 1px 2px rgba(0,0,0,0.4);
+                    border-radius: 50%;
+                    transform: translate(-2px,-2px);
+                }
+            }
+            .picker-com{
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+        }
+    }
+    .colorBar{
+        .content{
+            background: linear-gradient(90deg,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red);
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        .picker-color-content-bar{
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            .bar{
+                position: absolute;
+                cursor: pointer;
+                box-sizing: border-box;
+                top: 0;
+                width: 4px;
+                height: 100%;
+                border-radius: 1px;
+                background: #fff;
+                border: 1px solid #f0f0f0;
+                box-shadow: 0 0 2px rgba(0,0,0,0.6);
+                z-index: 1;
+            }
+            
+            
+        }
+    }
+    .colorSlider{
+        .picker-color-alpha-slider{
+            position: relative;
+            margin-top: 4px;
+            height: 12px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+            .picker-color-alpha-slider__thumb{
+                position: absolute;
+                cursor: pointer;
+                box-sizing: border-box;
+                left: 0;
+                top: 0;
+                width: 4px;
+                height: 100%;
+                border-radius: 1px;
+                background: #fff;
+                border: 1px solid #f0f0f0;
+                box-shadow: 0 0 2px rgba(0,0,0,0.6);
+                z-index: 1;
+            }
+            .picker-color-alpha-slider__bar{
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
             }
         }
     }

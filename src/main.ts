@@ -1,9 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue' 
-import '@/assets/styles/index.scss'
-import { Com } from './components/colorPicker/index'
+import '@/assets/styles/index.scss' 
 
-createApp(App)  
-    .use(Com)
+createApp(App)   
     .mount('#app')
     

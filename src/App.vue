@@ -1,11 +1,11 @@
 <template>
   <div class="app">
-    <ColorPicker /> 
+    <ColorPicker @changePickerColorBen="changeFontSize" :color="color" /> 
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent,ref} from 'vue'
 import ColorPicker from '@/components/colorPicker/index.vue'
 // import ColorPicker from 'vue3-ts-picker'
 //  "build": "vue-cli-service build --target lib ./src/components/colorPicker/index.ts",
@@ -15,6 +15,17 @@ export default defineComponent({
   components:{ 
     ColorPicker
   },
+   setup() {
+    const color = ref('rgba(158,77,139,0.5)')
+    const changeFontSize = (color: string) => {
+      console.log('color', color)
+    }
+
+    return {
+      changeFontSize,
+      color
+    }
+  }
 })
 </script>
 
