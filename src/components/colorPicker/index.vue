@@ -152,12 +152,7 @@ export default defineComponent({
       const changeColorMode = () => {
           isRgbMode.value = !isRgbMode.value
       }
-
-      watch(() => props.color,() => {
-         if(props.color) { 
-             changePredeine(props.color)  
-         }
-      }) 
+ 
       onMounted(() => {
          changePredeine(props.color)
       }) 
